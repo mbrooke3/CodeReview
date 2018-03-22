@@ -1,0 +1,26 @@
+<%inherit file="base_app.htm" />
+
+<%block name="middle">
+<div id="section">
+    ## %for p in products:
+    <div class="images">
+        %for i in p.image_urls():
+        <img id="thumbnail" class="product_images" alt="i.filename" src="${i}">
+        %endfor
+    </div>
+    <div><img id="image_detail" class="product_images" alt="${p.name}" src="${p.image_url()}"></div>
+    <div class="prod_info">
+        <h1>${p.name}</h1>
+        </br>
+        <div id="price">$${p.price}</div>
+        <p> ${p.description}</p>
+
+        %if p.__class__.__name__ == 'BulkProduct':
+            <span id="quantity1">Quantity</span>
+            <input class="quantity2" type="number" name="quantity" min="1" max="${p.quantity}">
+            %endif
+            <button type="button" class="btn btn-success">Add to Cart</button>
+    </div>
+    ## %endfor
+</div>
+</%block>

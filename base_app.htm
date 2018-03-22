@@ -1,0 +1,43 @@
+## this is the skeleton of all pages on in this app - it defines the basic html tags
+<!DOCTYPE html>
+<%inherit file="/homepage/templates/base.htm" />
+<%! from catalog import models as cmod %>
+<html>
+    <meta charset="UTF-8">
+    <head>
+
+    </head>
+    <body>
+
+        <header>
+        </header>
+
+        <main>
+          <%block name="left">
+ <ul style="list-style-type: none">
+     <li class="${ 'active' if len(request.dmp.urlparams) == 0 else ' ' } category"><a href="/catalog/index/0/1/">All Products</a></li>
+     %for c in cmod.Category.objects.order_by('name'):
+         <li class="${ 'active' if request.dmp.urlparams[0] == str(c.id) else ' ' } category"><a href="/catalog/index/${c.id}">${c.name}</a></li>
+     %endfor
+ </ul>
+</%block>
+
+
+<%block name="right">
+   <h3>Recently Viewed</h3>
+   <ol id="recent_view"style="list-style-type: none">
+   %for i in request.lastfivelist[1:6]:
+      <li>
+        <a href="/catalog/details/${ i.id }/">
+        <img id="thumbnail" class="product_images" src="${ i.image_url() }" >
+        ${i.name}
+      </li>
+    %endfor
+  </ol>
+</%block>
+
+
+        </main>
+
+    </body>
+</html>
