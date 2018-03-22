@@ -1,0 +1,83 @@
+<%inherit file="/homepage/templates/base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="navbar">
+<header>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img height="50" id="menu-img" src="${ STATIC_URL }homepage/media/images/musicnote.jpg"
+                     alt="Music Note">
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="${ 'active' if request.dmp.page == 'homepage/index' else ' ' }"><a href="/homepage/index">Home</a>
+                </li>
+                <li class="${ 'active' if request.dmp.page == 'about' else ' ' }"><a href="/homepage/about">About</a>
+                </li>
+                <li class="${ 'active' if request.dmp.page == 'contact' else ' ' }"><a
+                        href="/homepage/contact">Contact</a></li>
+                <li class="${ 'active' if request.dmp.page == 'FAQ' else ' ' }"><a href="/homepage/FAQ">FAQ</a></li>
+                <li class="${ 'active' if request.dmp.page == 'terms' else ' ' }"><a href="/homepage/terms">Terms</a>
+                </li>
+                <li class="${ 'active' if request.dmp.page == 'catalog/index' else ' ' }"><a href="/catalog/index">Product
+                    Catalog</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Login <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/account/login/">Login</a></li>
+                        <li><a href="/account/signup/">Sign Up</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+</%block>
+
+<%block name="catalog_left">
+<ul style="list-style-type: none">
+    <li class="${ 'active' if len(request.dmp.urlparams) == 0 else ' ' } category"><a href="/catalog/index/0/1/">All
+        Products</a></li>
+    %for c in cmod.Category.objects.order_by('name'):
+    <li class="${ 'active' if request.dmp.urlparams[0] == str(c.id) else ' ' } category"><a
+            href="/catalog/index/${c.id}">${c.name}</a></li>
+    %endfor
+</ul>
+</%block>
+
+
+<%block name="catalog_right">
+<div class="rightcolumn">
+    <h3>Recently Viewed</h3>
+    jn %if request.dmp.page == 'detail':
+    %for i in request.LastFiveList[1:6]:
+    <ul class="recent_list" style="list-style-type: none">
+        <li>
+            <a href="/catalog/detail/${ i.id }/">
+                <img class="recently_viewed" src="${i.image_url()}">
+                <div class="recently_viewed_name text-center">${i.name | h}</div>
+            </a>
+        </li>
+    </ul>
+    %endfor
+    %else:
+    %for i in request.LastFiveList[0:5]:
+    <ul class="recent_list" style="list-style-type: none">
+        <li>
+            <a href="/catalog/detail/${ i.id }/">
+                <img class="recently_viewed" src="${i.image_url()}">
+                <div class="recently_viewed_name text-center">${i.name | h}</div>
+            </a>
+        </li>
+    </ul>
+    %endfor
+    %endif
+</div>
+</%block>
+
+
+x
